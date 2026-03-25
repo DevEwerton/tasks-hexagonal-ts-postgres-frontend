@@ -15,7 +15,7 @@ export function Input({ label, name, value, onChange, type = "text", placeholder
 {
 	return (
 		<div className="flex flex-col mb-[10px]">
-			<label className="text-[16px] text-secondary-700 font-normal mb-[5px]">{label}</label>
+			<label className="text-[16px] text-secondary-700 font-normal mb-[5px] select-none">{label}</label>
 			<input
 				type={type}
 				name={name}

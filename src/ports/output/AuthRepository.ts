@@ -1,11 +1,11 @@
+import { AuthResponseDTO, LoginDTO } from "../../shared/dtos/AuthDTO";
 import { User } from "../../domain/entities/User";
-import { LoginDTO } from "../../shared/dtos/AuthDTO";
 
 export interface AuthRepository
 {
-	login(credentials: LoginDTO): Promise<User>;
+	login(credentials: LoginDTO): Promise<AuthResponseDTO>;
 	logout(): Promise<void>;
-	saveToken(token: string): void;
-	getToken(): string | null;
+	saveToken(token: string): Promise<void>;
+	getToken(): Promise<string | null>;
 	getCurrentUser(): Promise<User | null>;
 }

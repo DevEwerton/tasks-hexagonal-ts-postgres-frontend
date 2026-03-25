@@ -35,35 +35,39 @@ export function TaskProvider({ children }: { children: React.ReactNode })
 	async function fetchTasks(userId: string): Promise<void>
 	{
 		setIsLoading(true);
-		setTimeout(async() => {
+		try
+		{
 			const data = await listTasksUseCase.execute(userId);
 			setTasks(data);
+		}
+		finally
+		{
 			setIsLoading(false);
-		}, 3000);
+		}
 	}
 
 	async function createTask(data: CreateTaskDTO): Promise<void>
 	{
-		const newTask = await createTaskUseCase.execute(data);
-		setTasks((prev) => [...prev, newTask]);
+		await createTaskUseCase.execute(data);
+		await fetchTasks(data.userId);
 	}
 
 	async function updateTask(id: string, data: UpdateTaskDTO): Promise<void>
 	{
-		const updatedTask = await updateTaskUseCase.execute(id, data);
-		setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
+		await updateTaskUseCase.execute(id, data);
+		await fetchTasks(data.userId);
 	}
 
 	async function deleteTask(id: string, userId: string): Promise<void>
 	{
 		await deleteTaskUseCase.execute(id, userId);
-		setTasks((prev) => prev.filter((task) => task.id !== id));
+		await fetchTasks(userId);
 	}
 
 	async function toggleTask(id: string, userId: string): Promise<void>
 	{
-		const updatedTask = await toggleTaskUseCase.execute(id, userId);
-		setTasks((prev) => prev.map((task) => (task.id === id ? updatedTask : task)));
+		await toggleTaskUseCase.execute(id, userId);
+		await fetchTasks(userId);
 	}
 
 	return (

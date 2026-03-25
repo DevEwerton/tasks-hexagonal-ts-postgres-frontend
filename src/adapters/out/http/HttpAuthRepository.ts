@@ -1,34 +1,30 @@
-import { User } from "../../../domain/entities/User";
 import { AuthRepository } from "../../../ports/output/AuthRepository";
-import { AuthResponseDTO, LoginDTO } from "../../../shared/dtos/AuthDTO";
-import { LocalStorageService } from "../storage/LocalStorageService";
+import { LoginDTO, AuthResponseDTO } from "../../../shared/dtos/AuthDTO";
+import { User } from "../../../domain/entities/User";
 import axiosInstance from "./axiosInstance";
+import { LocalStorageService } from "../storage/LocalStorageService";
 
 export class HttpAuthRepository implements AuthRepository
 {
-	async login(credentials: LoginDTO): Promise<User>
+	async login(credentials: LoginDTO): Promise<AuthResponseDTO>
 	{
-		const response = await axiosInstance.post<AuthResponseDTO>("/auth/login", credentials);
-		const { token, user } = response.data;
-
-		LocalStorageService.saveToken(token);
-		LocalStorageService.saveUser(user);
-
-		return user;
+		const { data } = await axiosInstance.post<AuthResponseDTO>("/auth/login", credentials);
+		return data;
 	}
 
 	async logout(): Promise<void>
 	{
 		await axiosInstance.post("/auth/logout");
-		LocalStorageService.clear();
+		LocalStorageService.removeToken();
+		LocalStorageService.removeUser();
 	}
 
-	saveToken(token: string): void
+	async saveToken(token: string): Promise<void>
 	{
 		LocalStorageService.saveToken(token);
 	}
 
-	getToken(): string | null
+	async getToken(): Promise<string | null>
 	{
 		return LocalStorageService.getToken();
 	}

@@ -1,9 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "../../domain/entities/User";
 import { Login } from "../../domain/use-cases/Login";
 import { Logout } from "../../domain/use-cases/Logout";
 import { LoginDTO } from "../../shared/dtos/AuthDTO";
 import { RepositoryFactory } from "../../adapters/factory/RepositoryFactory";
+import { LocalStorageService } from "../../adapters/out/storage/LocalStorageService";
 
 export interface AuthContextData
 {
@@ -39,8 +40,11 @@ export function AuthProvider({ children }: { children: React.ReactNode })
 
 	async function login(credentials: LoginDTO): Promise<void>
 	{
-		const loggedUser = await loginUseCase.execute(credentials);
-		setUser(loggedUser);
+		const response = await loginUseCase.execute(credentials);
+		await authRepository.saveToken(response.token);
+		LocalStorageService.saveUser(response.user);
+		console.log("response: ", response);
+		setUser(response.user);
 	}
 
 	async function logout(): Promise<void>
@@ -54,4 +58,9 @@ export function AuthProvider({ children }: { children: React.ReactNode })
 			{children}
 		</AuthContext.Provider>
 	);
+}
+
+export function useAuth(): AuthContextData
+{
+	return useContext(AuthContext);
 }

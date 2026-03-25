@@ -23,7 +23,7 @@ export function Button({ label, onClick, type = "button", variant = "primary", d
 			type={type}
 			onClick={onClick}
 			disabled={disabled || isLoading}
-			className={`px-[12px] py-[8px] rounded-[5px] text-[16px] font-normal transition-colors disabled:opacity-50 ${variants[variant]}`}
+			className={`px-[12px] py-[8px] rounded-[5px] text-[16px] font-normal transition-colors disabled:opacity-50 ${variants[variant]} select-none`}
 		>
 			{isLoading ? "loading..." : label}
 		</button>

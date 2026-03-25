@@ -7,7 +7,7 @@ export class HttpTaskRepository implements TaskRepository
 {
 	async findAllByUserId(userId: string): Promise<Task[]>
 	{
-		const response = await axiosInstance.get<Task[]>(`/tasks/user/${userId}`);
+		const response = await axiosInstance.get<Task[]>(`/tasks/${userId}`);
 		return response.data;
 	}
 

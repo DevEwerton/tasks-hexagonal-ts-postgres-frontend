@@ -1,28 +1,27 @@
-import { User } from "../entities/User";
 import { AuthRepository } from "../../ports/output/AuthRepository";
-import { LoginDTO } from "../../shared/dtos/AuthDTO";
+import { LoginDTO, AuthResponseDTO } from "../../shared/dtos/AuthDTO";
 
 export class Login
 {
-	constructor(private authRepository: AuthRepository) {}
+	constructor(private readonly authRepository: AuthRepository) {}
 
-	async execute(credentials: LoginDTO): Promise<User>
+	async execute(credentials: LoginDTO): Promise<AuthResponseDTO>
 	{
-		if (!credentials.email.trim())
+		if (!credentials.email || !credentials.email.trim())
 		{
-			throw new Error("E-mail não informado.");
+			throw new Error("Email is required.");
 		}
 
-		if (!credentials.password.trim())
+		if (!credentials.password || !credentials.password.trim())
 		{
-			throw new Error("Senha não informada.");
+			throw new Error("Password is required.");
 		}
 
 		if (!credentials.email.includes("@"))
 		{
-			throw new Error("E-mail inválido.");
+			throw new Error("Invalid email.");
 		}
 
-		return await this.authRepository.login(credentials);
+		return this.authRepository.login(credentials);
 	}
 }

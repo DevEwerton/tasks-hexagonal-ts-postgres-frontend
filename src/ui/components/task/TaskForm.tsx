@@ -33,7 +33,7 @@ export function TaskForm({ task, onClose }: TaskFormProps)
 		{
 			if (isEditing)
 			{
-				const data: UpdateTaskDTO = { id: task.id, title, description };
+				const data: UpdateTaskDTO = { id: task.id, title, description, userId: user!.id };
 				await updateTask(task.id, data);
 				if (onClose) { onClose(); }
 			}

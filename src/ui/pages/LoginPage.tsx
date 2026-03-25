@@ -45,7 +45,7 @@ export function LoginPage()
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-secondary-50">
 			<div className="p-[30px] min-w-[350px] rounded-[5px] bg-light-50">
-				<h1 className="text-center m-[20px] text-[28px] text-secondary-700">LOGIN</h1>
+				<h1 className="text-center m-[20px] text-[28px] text-secondary-700 select-none">LOGIN</h1>
 				<form onSubmit={handleSubmit} className="flex flex-col">
 					<Input
 						label="Mail"
